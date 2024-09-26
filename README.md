@@ -97,10 +97,10 @@ JOIN Books ON Loans.BookID = Books.BookID;
 Purpose: This query retrieves the names of members along with the titles of the books they have loaned and the loan dates. It uses inner joins to connect the Loans, Members, and Books tables based on their respective IDs.
 Data Definition Language (DDL), Data Manipulation Language (DML), Data Control Language (DCL), Transaction Control Language (TCL):
 
-DDL: The commands to create tables (e.g., CREATE TABLE) define the structure of the database./n
-DML: Commands like INSERT, UPDATE, and DELETE are used to manipulate data in the tables./n
-DCL: Commands like GRANT control permissions for users to access or modify data./n
-TCL: Commands like COMMIT ensure that transactions are saved permanently to the database./n
+###### DDL: The commands to create tables (e.g., CREATE TABLE) define the structure of the database.
+###### DML: Commands like INSERT, UPDATE, and DELETE are used to manipulate data in the tables.
+###### DCL: Commands like GRANT control permissions for users to access or modify data.
+###### TCL: Commands like COMMIT ensure that transactions are saved permanently to the database. /n
 
 ## Summary
 
