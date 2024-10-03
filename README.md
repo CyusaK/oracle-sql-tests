@@ -1,110 +1,140 @@
-# oracle-sql-tests
-## Description of SQL Commands
-Creating Tables:
 
-Authors Table:
 
-### 
+# README
+## Problem Statement
+This database system is designed to manage an e-commerce platform that handles clients, products, and orders. The primary goal is to facilitate transactions between clients and products while maintaining a structured record of orders, clients, and product inventory. The database supports operations such as adding clients, products, and orders, updating client details, and deleting products from inventory.
 
-CREATE TABLE Authors (
-    AuthorID INT PRIMARY KEY,
-    Name VARCHAR(100)
+## SQL Commands Executed
+1. Table Creation
+Create the example table (initially for demonstration purposes):
+
+### sql 
+
+CREATE TABLE example (
+    id NUMBER PRIMARY KEY,
+    name VARCHAR2(100)
 );
-Purpose: This command creates a table named Authors with two columns: AuthorID, which is the primary key, and Name, which stores the author's name.
-Books Table:
 
-### 
+### Create the Products table:
 
-CREATE TABLE Books (
-    BookID INT PRIMARY KEY,
-    Title VARCHAR(200),
-    AuthorID INT,
-    FOREIGN KEY (AuthorID) REFERENCES Authors(AuthorID)
+### sql
+
+CREATE TABLE Products (
+    ProductID NUMBER PRIMARY KEY,
+    ProductName VARCHAR2(100),
+    Price NUMBER,
+    StockQuantity NUMBER
 );
-Purpose: This command creates the Books table. It has three columns: BookID (primary key), Title, and AuthorID. The AuthorID is a foreign key that establishes a relationship with the Authors table, allowing each book to be associated with an author.
-Members Table:
+Create the Clients table:
 
-### 
+### sql
 
-CREATE TABLE Members (
-    MemberID INT PRIMARY KEY,
-    Name VARCHAR(100)
+CREATE TABLE Clients (
+    ClientID NUMBER PRIMARY KEY,
+    ClientName VARCHAR2(100),
+    Email VARCHAR2(100),
+    PhoneNumber VARCHAR2(15)
 );
-Purpose: This command creates the Members table, which contains member information. It includes MemberID (primary key) and Name.
-Loans Table:
+Create the Orders table with foreign keys:
 
-### 
+### sql
 
-CREATE TABLE Loans (
-    LoanID INT PRIMARY KEY,
-    BookID INT,
-    MemberID INT,
-    LoanDate DATE,
-    FOREIGN KEY (BookID) REFERENCES Books(BookID),
-    FOREIGN KEY (MemberID) REFERENCES Members(MemberID)
+CREATE TABLE Orders (
+    OrderID NUMBER PRIMARY KEY,
+    OrderDate DATE,
+    ClientID NUMBER,
+    ProductID NUMBER,
+    FOREIGN KEY (ClientID) REFERENCES Clients(ClientID),
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
 );
-###### Purpose: This command creates the Loans table, which tracks book loans. It has LoanID (primary key), BookID, MemberID, and LoanDate. Both BookID and MemberID are foreign keys that link to their respective tables, establishing relationships for tracking which member has loaned which book.
-Inserting Data:
 
-Insert Author:
+### 2. Data Insertion
 
-### 
+Insert data into Products:
 
-INSERT INTO Authors (AuthorID, Name) VALUES (1, 'George Orwell');
-###### Purpose: This command adds a new author, George Orwell, with an AuthorID of 1 to the Authors table.
-Insert Book:
+### sql
 
-### 
+INSERT INTO Products (ProductID, ProductName, Price, StockQuantity) VALUES (1, 'Laptop', 1000, 50);
+INSERT INTO Products (ProductID, ProductName, Price, StockQuantity) VALUES (2, 'Smartphone', 500, 100);
+INSERT INTO Products (ProductID, ProductName, Price, StockQuantity) VALUES (3, 'Tablet', 300, 75);
 
-INSERT INTO Books (BookID, Title, AuthorID) VALUES (1, '1984', 1);
-###### Purpose: This command inserts a book titled "1984" into the Books table, linking it to the author with AuthorID 1.
-Insert Member:
+Insert data into Clients:
 
-### 
+### sql
 
-INSERT INTO Members (MemberID, Name) VALUES (1, 'John Doe');
-###### Purpose: This command adds a new member, John Doe, with a MemberID of 1 to the Members table.
-Insert Loan:
+INSERT INTO Clients (ClientID, ClientName, Email, PhoneNumber) VALUES (1, 'Alice', 'alice@example.com', '1234567890');
+INSERT INTO Clients (ClientID, ClientName, Email, PhoneNumber) VALUES (2, 'Bob', 'bob@example.com', '0987654321');
 
-### 
+Insert data into Orders:
 
-INSERT INTO Loans (LoanID, BookID, MemberID, LoanDate) VALUES (1, 1, 1, SYSDATE);
-###### Purpose: This command creates a loan record for the book with BookID 1 (1984) loaned to member with MemberID 1 (John Doe) on the current date.
-Updating Data:
+### sql
 
-Update Member Name:
-sql
-Copy code
-UPDATE Members SET Name = 'Jane Doe' WHERE MemberID = 1;
-###### Purpose: This command changes the name of the member with MemberID 1 from John Doe to Jane Doe.
-Deleting Data:
+INSERT INTO Orders (OrderID, OrderDate, ClientID, ProductID) VALUES (1, SYSDATE, 1, 1);
+INSERT INTO Orders (OrderID, OrderDate, ClientID, ProductID) VALUES (2, SYSDATE, 2, 2);
+INSERT INTO Orders (OrderID, OrderDate, ClientID, ProductID) VALUES (3, SYSDATE, 1, 3);
+3. Data Manipulation
+Update a client's email:
 
-Delete Loan Record:
+### sql
 
-### 
+UPDATE Clients SET Email = 'alice.new@example.com' WHERE ClientID = 1;
+Delete a product:
 
-DELETE FROM Loans WHERE LoanID = 1;
-###### Purpose: This command removes the loan record with LoanID 1 from the Loans table, indicating that the loan is no longer active.
-Performing Joins:
+### sql
 
-Join Query to Retrieve Loan Information:
-### 
+DELETE FROM Products WHERE ProductID = 3; -- Remove Tablet
+4. Data Retrieval
+Get Orders with Client and Product details:
 
-SELECT Members.Name, Books.Title, Loans.LoanDate
-FROM Loans
-JOIN Members ON Loans.MemberID = Members.MemberID
-JOIN Books ON Loans.BookID = Books.BookID;
-### Purpose:This query retrieves the names of members along with the titles of the books they have loaned and the loan dates. It uses inner joins to connect the Loans, Members, and Books tables based on their respective IDs.
-Data Definition Language (DDL), Data Manipulation Language (DML), Data Control Language (DCL), Transaction Control Language (TCL):
+### sql
 
-###### DDL: The commands to create tables (e.g., CREATE TABLE) define the structure of the database.
-###### DML: Commands like INSERT, UPDATE, and DELETE are used to manipulate data in the tables.
-###### DCL: Commands like GRANT control permissions for users to access or modify data.
-###### TCL: Commands like COMMIT ensure that transactions are saved permanently to the database.
+SELECT O.OrderID, O.OrderDate, C.ClientName, P.ProductName
+FROM Orders O
+JOIN Clients C ON O.ClientID = C.ClientID
+JOIN Products P ON O.ProductID = P.ProductID;
+Get all Clients with their total Orders:
 
-## Summary
+### sql
 
-The SQL commands outlined above establish a basic library management system, allowing for the creation of related tables, the manipulation of data (adding, updating, deleting), and the ability to query related information through joins. Each command is designed to fulfill specific functions within the database, ensuring the system can efficiently manage books, authors, members, and loans.
+SELECT C.ClientName, COUNT(O.OrderID) AS TotalOrders
+FROM Clients C
+LEFT JOIN Orders O ON C.ClientID = O.ClientID
+GROUP BY C.ClientName;
+Find all Orders placed by a specific client (e.g., Alice):
+
+### sql
+
+SELECT O.OrderID, O.OrderDate
+FROM Orders O
+WHERE O.ClientID = (
+    SELECT C.ClientID
+    FROM Clients C
+    WHERE C.ClientName = 'Alice'
+);
+5. Transactions
+Commit Changes:
+
+### sql
+
+COMMIT;
+Rollback Example (if needed):
 
 
+ROLLBACK;
+Screenshots
+Insert screenshots of your SQL queries, results, and your conceptual diagram here.
 
+Explanations of Results and Transactions
+Table Creation: The creation of tables sets up the necessary structure for storing clients, products, and orders, with appropriate relationships through foreign keys.
+
+Data Insertion: Inserting records into the Products and Clients tables allows the platform to start tracking inventory and clients.
+
+### Data Manipulation:
+
+The UPDATE command modified the email of a client, reflecting changes in client information.
+The DELETE command removed the 'Tablet' product from the inventory, reflecting a change in available products.
+Data Retrieval: Queries were executed to fetch relevant data:
+
+Orders alongside client and product details provide a comprehensive view of transactions.
+Aggregating total orders per client helps in analyzing customer engagement.
+Transactions: COMMIT finalizes the changes made to the database, while ROLLBACK serves as a safety measure to revert changes if necessary.
